@@ -1,44 +1,54 @@
 const fs = require("fs");
 const path = require("path");
 
-const { Client, Events, GatewayIntentBits, Collection } = require ('discord.js');
+const { Client, Events, GatewayIntentBits, Collection, REST, Routes } = require ('discord.js');
 const { token } = require("./config.json");
 
 const client = new Client({ intents: [GatewayIntentBits.DirectMessages, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages]});
 
 client.commands = new Collection();
+const commands = [];
 
-const commandsPath = path.join(__dirname, 'commands');
+const commandsPath = path.join(__dirname, 'Slash Commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
-for (const file of commandFiles) {
-    const filePath = path.join(commandsPath, file);
-    const command = require(filePath);
-    if ('data' in command && 'execute' in command) {
-        client.commands.set(command.data.name, command);
+commandFiles.forEach((file) => {
+    const command = require(`./Slash Commands/${file}`);
+    if (command.data !== undefined) {
+        client.commands.set(command.data.name, file)
+        commands.push(command.data.toJSON());
     } else {
-        console.log(`Command; ${filePath} missing essential data or execute!`)
+        console.log("WARNING: NO DATA PROPERTY!");
     }
+})
+
+const eventsPath = path.join(__dirname, 'Events');
+const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
+
+for (const file of eventFiles) {
+	const filePath = path.join(eventsPath, file);
+	const event = require(filePath);
+	if (event.once) {
+		client.once(event.name, (...args) => event.execute(...args));
+	} else {
+		client.on(event.name, (...args) => event.execute(...args));
+	}
 }
 
-client.once(Events.ClientReady, () => {
-    console.log("Bot Online!")
-})
+const rest = new REST({version:'10'}).setToken(token);
 
-client.on(Events.InteractionCreate, async interaction => {
-    if (!interaction.isChatInputCommand()) return;
-    
-    const command = interaction.client.commands.get(interaction.commandName);
-
-    if (!command) {
-        console.log("no command"); return;
-    }
-
+(async () => {
     try {
-        await command.execute(interaction);
-    } catch (err) {
-        console.log(err);
+        console.log(`Loading Application Commands: ${commands.length}`);
+
+        await rest.put(
+            Routes.applicationCommands('1048563250079485993'),
+            {body: commands}
+        );
+
+    } catch (error) {
+        console.error(error);
     }
-})
+})();
 
 client.login(token);
