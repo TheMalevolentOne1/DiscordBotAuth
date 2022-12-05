@@ -1,26 +1,26 @@
 const fs = require("fs");
 const path = require("path");
 
-const { Client, Events, GatewayIntentBits, Collection, REST, Routes } = require ('discord.js');
+const { Client, GatewayIntentBits, Collection, REST, Routes } = require ('discord.js');
 const { token } = require("./config.json");
 
 const client = new Client({ intents: [GatewayIntentBits.DirectMessages, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages]});
 
-client.commands = new Collection();
 const commands = [];
+client.commands = new Collection();
 
 const commandsPath = path.join(__dirname, 'Slash Commands');
 const commandFiles = fs.readdirSync(commandsPath).filter(file => file.endsWith('.js'));
 
 commandFiles.forEach((file) => {
-    const command = require(`./Slash Commands/${file}`);
+    const command = require(commandsPath+"/"+file);
     if (command.data !== undefined) {
-        client.commands.set(command.data.name, file)
+        client.commands.set(command.data.name, command);
         commands.push(command.data.toJSON());
     } else {
         console.log("WARNING: NO DATA PROPERTY!");
     }
-})
+});
 
 const eventsPath = path.join(__dirname, 'Events');
 const eventFiles = fs.readdirSync(eventsPath).filter(file => file.endsWith('.js'));
