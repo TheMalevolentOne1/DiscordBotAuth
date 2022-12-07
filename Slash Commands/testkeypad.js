@@ -12,7 +12,7 @@ module.exports = {
         const buttons = [];
         const actionrows = [];
 
-        for (let i = 0; i < 9; i++) {
+        for (let i = 0; i < 10; i++) {
             const button = new ButtonBuilder()
             .setCustomId("keypad"+i)
             .setLabel(`${i}`)
@@ -20,13 +20,15 @@ module.exports = {
 
             buttons.push(button);
 
-            if (i instanceof [3,6,9]) {
+            if ([3 ,6,9].includes(i)) {
                 const actionrow = new ActionRowBuilder().addComponents(buttons[i-2], buttons[i-1], buttons[i]);
                 actionrows.push(actionrow);
             }
         }
 
-        console.log(actionrows)
+        interaction.reply({components: actionrows});
+
+        
 
         
     }
