@@ -5,11 +5,9 @@ const name = __filename.split(/\/|\\/).pop().replace('.js', '');
 module.exports = {
     data: new SlashCommandBuilder()
     .setName(name)
-    .setDescription("dog pic"),
+    .setDescription("get avatar"),
 
     async execute(interaction) {
-        await fetch('https://dog.ceo/api/breeds/image/random', {method: "GET"})
-        .then(res => res.json())
-        .then(json => interaction.reply(json.message))
+        await interaction.reply({content: interaction.user.displayAvatarURL({size: 4096})})
     }
 } 

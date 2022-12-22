@@ -8,8 +8,12 @@ module.exports = {
     .setDescription("dog pic"),
 
     async execute(interaction) {
-        await fetch('https://dog.ceo/api/breeds/image/random', {method: "GET"})
+        await fetch('https://api.imgflip.com/get_memes', {method: "GET"})
         .then(res => res.json())
-        .then(json => interaction.reply(json.message))
+        .then(json => {
+            const ranNum = Math.floor(Math.random() * 100);
+
+            interaction.reply({content: json.data.memes[ranNum].url})
+        })
     }
 } 
