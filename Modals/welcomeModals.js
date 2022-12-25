@@ -1,10 +1,10 @@
 const { ModalBuilder, ActionRowBuilder, TextInputBuilder } = require("@discordjs/builders");
-const { TextInputStyle, ModalSubmitFields } = require('discord.js');
+const { TextInputStyle } = require('discord.js');
 
 exports.modOne = () => {
     const modalIntro = new ModalBuilder()
-        .setCustomId('intro1')
-        .setTitle('Welcome To The Server!')
+        .setCustomId('intromodal')
+        .setTitle('Introductionary Questions')
         .setComponents(
             new ActionRowBuilder()
             .addComponents(
@@ -57,8 +57,8 @@ exports.modOne = () => {
 
 exports.modTwo =() => {
     const modalRoles = new ModalBuilder()
-        .setCustomId('intro1')
-        .setTitle('Welcome To The Server!')
+        .setCustomId('personalmodal')
+        .setTitle('Personal Questions')
         .setComponents(
             new ActionRowBuilder()
             .addComponents(

@@ -20,7 +20,15 @@ module.exports = {
 		}
 
 		if (interaction.isModalSubmit()) {
-			if (['intro1', 'intro2', 'intro3'].includes(interaction.customId)) {
+			if (['intromodal', 'personalmodal'].includes(interaction.customId)) {
+				const welcome = require("../Slash Commands/welcome")
+
+				welcome.execute(interaction)
+			}
+		}
+
+		if (interaction.isButton()) {
+			if (['rolessetup','introsetup'].includes(interaction.customId)) {
 				const welcome = require("../Slash Commands/welcome")
 
 				welcome.execute(interaction)
