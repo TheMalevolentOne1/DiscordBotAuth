@@ -1,0 +1,16 @@
+const fetch = require('node-fetch');
+
+const url = 'https://tiktok-video-no-watermark2.p.rapidapi.com/?url=https%3A%2F%2Fwww.tiktok.com%2F%40tiktok%2Fvideo%2F7106658991907802411&hd=0';
+
+const options = {
+  method: 'GET',
+  headers: {
+    'X-RapidAPI-Key': 'cb8d208c95msha1594474a22ae17p17512djsn752c8b56997f',
+    'X-RapidAPI-Host': 'tiktok-video-no-watermark2.p.rapidapi.com'
+  }
+};
+
+fetch(url, options)
+	.then(res => res.json())
+	.then(json => console.log(json))
+	.catch(err => console.error('error:' + err));
