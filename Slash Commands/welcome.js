@@ -14,7 +14,13 @@ module.exports = {
         }
 
         if (interaction.isModalSubmit()) {
-            console.log(interaction)
+            const fields = interaction.fields
+
+            if (!isNaN(fields.getTextInputValue('age'))) {
+                
+            } else {
+                interaction.reply({content: "Age must be a number!"})
+            }
         }
     }
 }

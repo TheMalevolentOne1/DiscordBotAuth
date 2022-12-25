@@ -1,8 +1,8 @@
 const { ModalBuilder, ActionRowBuilder, TextInputBuilder } = require("@discordjs/builders");
-const { TextInputStyle } = require('discord.js');
+const { TextInputStyle, ModalSubmitFields } = require('discord.js');
 
-exports.modOne = function() {
-    const model = new ModalBuilder()
+exports.modOne = () => {
+    const modalIntro = new ModalBuilder()
         .setCustomId('intro1')
         .setTitle('Welcome To The Server!')
         .setComponents(
@@ -52,5 +52,41 @@ exports.modOne = function() {
             )
         )
 
-    return model;
+    return modalIntro;
+}
+
+exports.modTwo =() => {
+    const modalRoles = new ModalBuilder()
+        .setCustomId('intro1')
+        .setTitle('Welcome To The Server!')
+        .setComponents(
+            new ActionRowBuilder()
+            .addComponents(
+                new TextInputBuilder()
+                .setCustomId('gender')
+                .setLabel("What is your gender?")
+                .setStyle(TextInputStyle.Short)
+                .setRequired(true) 
+            ),
+            
+            new ActionRowBuilder()
+            .addComponents(
+                new TextInputBuilder()
+                .setCustomId('pronouns')
+                .setLabel("How are your pronouns?")
+                .setStyle(TextInputStyle.Short)
+                .setRequired(true)
+            ),
+
+            new ActionRowBuilder()
+            .addComponents(
+                new TextInputBuilder()
+                .setCustomId('sexuality')
+                .setLabel("What is your sexuality?")
+                .setStyle(TextInputStyle.Short)
+                .setRequired(true)
+            )
+        )
+
+    return modalRoles;
 }

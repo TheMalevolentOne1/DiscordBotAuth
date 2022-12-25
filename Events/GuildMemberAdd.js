@@ -1,3 +1,4 @@
+const { ActionRowBuilder, ButtonBuilder } = require("@discordjs/builders");
 const { Events } = require("discord.js");
 
 module.exports = {
@@ -5,6 +6,11 @@ module.exports = {
     async execute(memberJoin) {
         if (memberJoin.user.bot) { return }
 
-        memberJoin.roles.add()
+        const welcomeActionRow = new ActionRowBuilder()
+        .addComponents(
+            new ButtonBuilder()
+            .setCustomId('introsetup')
+            .setLabel("Introduction ")
+        )
     }
 }
