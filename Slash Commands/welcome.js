@@ -9,22 +9,29 @@ module.exports = {
     .setDescription("welcome"),
 
     async execute(interaction) {
+
         if (interaction.isCommand()) {
             const welcomeRow = new ActionRowBuilder()
             .addComponents(
                 new ButtonBuilder()
-                .setCustomId('introsetup')
-                .setLabel("Introduction Setup ❌")
-                .setStyle(ButtonStyle.Danger),
-    
-                new ButtonBuilder()
                 .setCustomId('rolessetup')
                 .setLabel("Roles Setup ❌")
+                .setStyle(ButtonStyle.Danger),
+
+                new ButtonBuilder()
+                .setCustomId('introsetup')
+                .setLabel("Introduction Setup ❌")
                 .setStyle(ButtonStyle.Danger)
             );
+            
 
-            await interaction.user.send({content: "**Welcome to the server!**\nPlease click the buttons below to begin\n", components: [welcomeRow]});
-            await interaction.reply({content: 'Setup Sent!'});
+            interaction.user.createDM().then(dmchannel => {
+                dmchannel.messages.fetch({limit: 100}).then(async msgs => { msgs.forEach(async msg => { if (msg.content.includes("Welcome")) { await interaction.reply({content: "Server Setup has already been sent.", ephemeral: true}); return; } else { 
+                    await interaction.user.send({content: "**Welcome to the server!**\nPlease click the buttons below to begin\n", components: [welcomeRow]});
+                    await interaction.reply({content: 'Setup Sent!'});
+                }})})
+            })
+                
         }
 
         if (interaction.isButton()) {
@@ -36,23 +43,22 @@ module.exports = {
         }
 
         if (interaction.isModalSubmit()) {
+            if (interaction.customId === "rolessetup") {
+
+            }
+
             if (interaction.customId === "intromodal") {
                 const fields = interaction.fields;
                 interaction.user.createDM().then(async (dm) => {
                     let c = 0;
-                    fields.getTextInputValue('name').split('').forEach(function(letter) { if (!isNaN(letter) && c === 0) { dm.send({content: "names can not have numbers in them!" }); c++; }}); //sends dms matching the number of numbers in the name *error*
+                    fields.getTextInputValue('name').split('').forEach((letter) => { if (!isNaN(letter) && c === 0) { dm.send({content: "names can not have numbers in them!" }); c++; }}); //sends dms matching the number of numbers in the name *error*
 
-                    if (!isNaN(fields.getTextInputValue('age'))) {
-                        /*dm.messages.fetch({ limit: 100 }).filter(msg => msg.components[0].customId === 'introsetup').then((msgs) => {
-                            console.log(msgs);
-                        })*/
-                        const dmsArr = []
-                        await dm.messages.fetch({limit: 100}).then(async dms => await dms.forEach((element) => {if (element.message.includes("Welcome")) { dmsArr.push(element); } }))
-                        dmsArr.forEach()
-                    } else {
-                        dm.send({content: "Age must be a **number**"});
+                    if (isNaN(fields.getTextInputValue('age'))) {
+                        dm.send({content: "Age must be a **number**", ephemeral: true});
                         return;
                     }
+
+                    
                 })
 
                 
