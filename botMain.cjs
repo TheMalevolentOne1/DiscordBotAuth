@@ -4,7 +4,7 @@ const path = require("path");
 const { Client, GatewayIntentBits, Collection, REST, Routes } = require ('discord.js');
 const { token } = require("./config.json");
 
-const client = new Client({ intents: [GatewayIntentBits.DirectMessages, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.GuildMembers]});
+const client = new Client({ intents: [GatewayIntentBits.DirectMessages, GatewayIntentBits.Guilds, GatewayIntentBits.GuildMessages, GatewayIntentBits.MessageContent, GatewayIntentBits.GuildMembers]});
 
 const commands = [];
 client.commands = new Collection();
